@@ -19,15 +19,23 @@ A framework for building LLM-based reviewers of creative writing using the TTCW 
 
 ## Setup
 
+Requires **Python 3.12** and **CUDA 12.8**.
+
 ```bash
-uv sync
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install all dependencies
+uv sync --python 3.12
 ```
+
+> `pyproject.toml` pulls PyTorch from the CUDA 12.8 index (`cu128`). Ensure your system has CUDA 12.8 drivers installed before running `uv sync`.
 
 Requires 4 CUDA GPUs. Update the data and model paths at the top of each script before running.
 
-### Start vLLM Server
+### vLLM Server
 
-Most dataset pipeline scripts call an OpenAI-compatible vLLM API. Start the server before running any dataset step:
+The dataset pipeline scripts do **not** load models directly — they call an OpenAI-compatible API served by vLLM. You must start the server with the appropriate model before each step:
 
 ```bash
 vllm serve <model-name> \
@@ -37,7 +45,16 @@ vllm serve <model-name> \
   --port 8000
 ```
 
-Replace `<model-name>` with your chosen judge model (e.g. `nvidia/Llama-3.1-Nemotron-Nano-8B-v1`). The API will be available at `http://0.0.0.0:8000/v1`.
+Each pipeline step requires a different model:
+
+| Step | Script | Required model type |
+|------|--------|-------------------|
+| Story generation | `Story_writing.py` | A capable instruction-following LLM (e.g. `google/gemma-3-27b-it`) |
+| Story evaluation | `Story_evaluator_api.py` | Judge LLMs — script runs each model listed in `CONFIG["evaluation_models"]` sequentially, restart the server for each |
+| Review synthesis | `summarize_reviews.py` | A capable instruction-following LLM (e.g. `zai-org/GLM-4.5-Air`) |
+| Dataset validation | `quality_validate_reviews_comments.py` | Any capable LLM for binary quality judgement |
+
+The model name passed to `vllm serve` must exactly match the name configured in each script's `CONFIG` dict.
 
 ---
 
