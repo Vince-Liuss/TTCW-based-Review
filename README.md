@@ -117,6 +117,8 @@ cd dataset && python analysis.py
 | `score_with_reviews` | Predict scores with full written reviews | 16384 |
 | `review_with_reasoning` | Generate reviews with reasoning traces | 32768 |
 
+Training uses LoRA by default (`--lora_r 64`, `--lora_alpha 128`). LoRA rank and alpha can be adjusted via CLI arguments, or LoRA can be disabled with `--use_lora false` for full fine-tuning.
+
 ### Single Run
 
 ```bash
