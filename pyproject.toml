@@ -1,0 +1,57 @@
+[project]
+name = "TTCW-based-Review"
+version = "0.1.0"
+description = "LLM-based reviewer for creative writing using TTCW evaluation criteria"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flash-attn>=2.7.0",
+    "triton; sys_platform == 'linux'",
+    "accelerate>=1.7.0",
+    "bitsandbytes>=0.46.0; sys_platform != 'darwin'",
+    "datasets>=3.6.0",
+    "deepspeed>=0.17.0",
+    "huggingface-hub[cli]>=0.32.4",
+    "jsonlines>=4.0.0",
+    "liger-kernel>=0.5.10",
+    "matplotlib>=3.10.3",
+    "peft>=0.15.2",
+    "safetensors>=0.5.3",
+    "scikit-learn>=1.7.0",
+    "scipy>=1.15.3",
+    "seaborn>=0.13.2",
+    "sentence-transformers>=4.1.0",
+    "spacy>=3.8.7",
+    "tokenizers>=0.21.1",
+    "transformers>=5.0.0",
+    "trl>=0.19.0",
+    "unstructured>=0.18.1",
+    "wandb>=0.20.1",
+    "torch==2.9.0",
+    "torchvision==0.24.0",
+    "torchaudio==2.9.0",
+    "en_core_web_md",
+    "torchao>=0.16.0",
+    "evaluate",
+    "bert-score"
+]
+
+[tool.uv]
+no-build-isolation-package = ["deepspeed", "flash-attn"]
+extra-build-variables = { 
+    deepspeed = { DS_BUILD_CPU_ADAM = "1", DS_BUILD_FUSED_ADAM = "1" }, 
+}
+
+[tool.uv.extra-build-dependencies]
+deepspeed = ["dskernels"]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cu128" }]
+torchvision = [{ index = "pytorch-cu128" }]
+torchaudio = [{ index = "pytorch-cu128" }]
+en_core_web_md = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0-py3-none-any.whl" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true

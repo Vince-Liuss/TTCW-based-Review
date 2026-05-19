@@ -1,0 +1,35 @@
+{
+  "bf16": {
+    "enabled": true
+  },
+  "fp16": {
+    "enabled": false
+  },
+  "zero_optimization": {
+    "stage": 3,
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 2e8,
+    "allgather_partitions": true,
+    "allgather_bucket_size": 2e8,
+    "sub_group_size": 1e10,
+    "stage3_param_persistence_threshold": 1e6,
+    "stage3_prefetch_bucket_size": 2e8,
+    "stage3_max_live_parameters": 5e8,
+    "stage3_max_reuse_distance": 5e8,
+    "stage3_gather_16bit_weights_on_model_save": true,
+    "stage3_use_all_reduce_for_fetch_params": true,
+    "module_granularity_threshold": 0,
+    "stage3_allgather_sequential": true
+  },
+  "gradient_accumulation_steps": "auto",
+  "gradient_clipping": "auto",
+  "train_batch_size": "auto",
+  "train_micro_batch_size_per_gpu": "auto",
+  "wall_clock_breakdown": false,
+  "torch_autocast": {
+    "enabled": true,
+    "dtype": "bfloat16"
+  }
+}
