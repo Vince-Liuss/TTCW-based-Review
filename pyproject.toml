@@ -33,7 +33,8 @@ dependencies = [
     "en_core_web_md",
     "torchao>=0.16.0",
     "evaluate",
-    "bert-score"
+    "bert-score",
+    "vllm==0.12.0",
 ]
 
 [tool.uv]

@@ -65,18 +65,11 @@ Requires 4 CUDA GPUs. Update the data and model paths at the top of each script 
 
 ### vLLM
 
-The dataset pipeline scripts do **not** load models directly — they call an OpenAI-compatible API served by vLLM. vLLM should be installed separately or in its own environment to avoid dependency conflicts with the training environment:
+`vllm==0.12.0` is included in `pyproject.toml` for post-training evaluation (`eval/evaluate_vllm.py`). For the dataset pipeline, vLLM is used in server mode only — no direct import required.
 
-```bash
-# Install vLLM in a separate environment (recommended)
-pip install vllm
+> **Running newer models:** Some recent models require a newer version of vLLM than `0.12.0`. In that case, install a newer vLLM in a separate Python environment or use Docker to avoid dependency conflicts with the training environment.
 
-# Or install from source for the latest model support
-git clone https://github.com/vllm-project/vllm.git
-cd vllm && pip install -e .
-```
-
-Start the server before running any dataset step:
+Start the vLLM server before running any dataset pipeline step:
 
 ```bash
 vllm serve <model-name> \
