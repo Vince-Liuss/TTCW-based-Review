@@ -6,6 +6,36 @@ A framework for building LLM-based reviewers of creative writing using the TTCW 
 
 ---
 
+## Repository Structure
+
+```
+├── dataset/
+│   ├── prompts.py                          # TTCW metric evaluation prompts
+│   ├── Story_writing.py                    # Story generation from writing prompts
+│   ├── Story_evaluator_api.py              # Async multi-judge LLM evaluation (resumable)
+│   ├── merge_evaluations.py                # Merge per-model evaluation splits
+│   ├── summarize_reviews.py                # Synthesize consensus reviews
+│   ├── dataset_build.py                    # Build HF SFT dataset
+│   ├── quality_validate_reviews_comments.py # NLG-based dataset quality validation
+│   └── analysis.py                         # Score distribution and correlation analysis
+├── train/
+│   ├── train.py                            # SFT + LoRA training (DeepSpeed ZeRO-3)
+│   ├── merge_lora.py                       # Standalone LoRA merge
+│   └── compute_metrics.py                  # Shared metric utilities (used by eval)
+├── eval/
+│   └── evaluate_vllm.py                    # Post-training evaluation with vLLM
+├── scripts/
+│   ├── train_ttcw_all_modes.sh             # Multi-model training orchestration
+│   ├── train_ttcw_nemotron.sh              # Nemotron-8B training
+│   └── evaluate_ttcw_auto.sh              # Batch eval across checkpoints
+├── config/
+│   └── ds_config.json                      # DeepSpeed ZeRO-3 configuration
+├── pyproject.toml                          # Python dependencies (uv)
+└── README.md
+```
+
+---
+
 ## TTCW Metrics (14)
 
 | Dimension | Metrics |
@@ -33,9 +63,20 @@ uv sync --python 3.12
 
 Requires 4 CUDA GPUs. Update the data and model paths at the top of each script before running.
 
-### vLLM Server
+### vLLM
 
-The dataset pipeline scripts do **not** load models directly — they call an OpenAI-compatible API served by vLLM. You must start the server with the appropriate model before each step:
+The dataset pipeline scripts do **not** load models directly — they call an OpenAI-compatible API served by vLLM. vLLM should be installed separately or in its own environment to avoid dependency conflicts with the training environment:
+
+```bash
+# Install vLLM in a separate environment (recommended)
+pip install vllm
+
+# Or install from source for the latest model support
+git clone https://github.com/vllm-project/vllm.git
+cd vllm && pip install -e .
+```
+
+Start the server before running any dataset step:
 
 ```bash
 vllm serve <model-name> \
@@ -154,36 +195,6 @@ bash scripts/evaluate_ttcw_auto.sh
 
 # Use --fresh to clear previous outputs and rerun from scratch
 bash scripts/evaluate_ttcw_auto.sh --fresh
-```
-
----
-
-## Repository Structure
-
-```
-├── dataset/
-│   ├── prompts.py                          # TTCW metric evaluation prompts
-│   ├── Story_writing.py                    # Story generation from writing prompts
-│   ├── Story_evaluator_api.py              # Async multi-judge LLM evaluation (resumable)
-│   ├── merge_evaluations.py                # Merge per-model evaluation splits
-│   ├── summarize_reviews.py                # Synthesize consensus reviews
-│   ├── dataset_build.py                    # Build HF SFT dataset
-│   ├── quality_validate_reviews_comments.py # NLG-based dataset quality validation
-│   └── analysis.py                         # Score distribution and correlation analysis
-├── train/
-│   ├── train.py                            # SFT + LoRA training (DeepSpeed ZeRO-3)
-│   ├── merge_lora.py                       # Standalone LoRA merge
-│   └── compute_metrics.py                  # Shared metric utilities (used by eval)
-├── eval/
-│   └── evaluate_vllm.py                    # Post-training evaluation with vLLM
-├── scripts/
-│   ├── train_ttcw_all_modes.sh             # Multi-model training orchestration
-│   ├── train_ttcw_nemotron.sh              # Nemotron-8B training
-│   └── evaluate_ttcw_auto.sh              # Batch eval across checkpoints
-├── config/
-│   └── ds_config.json                      # DeepSpeed ZeRO-3 configuration
-├── pyproject.toml                          # Python dependencies (uv)
-└── README.md
 ```
 
 ---
