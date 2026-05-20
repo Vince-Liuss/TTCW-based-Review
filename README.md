@@ -1,8 +1,10 @@
 # TTCW-based-Review
 
-**[Paper coming soon]**
+> **Note:** The paper is currently under review. The citation will be updated upon arXiv release.
 
 A framework for building LLM-based reviewers of creative writing using the TTCW (Thinking Through Creative Writing) evaluation criteria. The pipeline covers dataset construction, model training, and evaluation across 14 structured writing quality metrics.
+
+**Dataset:** [VibrantVista/TTCW-Based-Review](https://huggingface.co/datasets/VibrantVista/TTCW-Based-Review) (available on HuggingFace)
 
 ---
 
