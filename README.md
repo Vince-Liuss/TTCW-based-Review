@@ -81,6 +81,24 @@ vllm serve <model-name> \
   --port 8000
 ```
 
+Some models require additional flags. Example for `zai-org/GLM-4.5-Air` (review synthesis):
+
+```bash
+vllm serve zai-org/GLM-4.5-Air \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --tensor-parallel-size 4 \
+  --dtype bfloat16 \
+  --max-model-len 16384 \
+  --gpu-memory-utilization 0.95 \
+  --max-num-seqs 650 \
+  --enable-prefix-caching \
+  --kv-cache-dtype fp8 \
+  --reasoning-parser glm45 \
+  --async-scheduling \
+  --trust-remote-code
+```
+
 Each pipeline step requires a different model:
 
 | Step | Script | Required model type |
