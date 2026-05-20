@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
-export NCCL_P2P_LEVEL=NVL
-export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 export WANDB_DIR="${PROJECT_ROOT}/logs/wandb"
