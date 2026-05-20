@@ -1,8 +1,3 @@
-"""
-This prompts are all based on the expert evaluation criteria from the paper: Art or Artifice? Large Language Models and the False Promise of Creativity
-
-
-"""
 
 
 def system_prompt():

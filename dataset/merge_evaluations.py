@@ -1,14 +1,3 @@
-"""
-merge_evaluations.py
---------------------
-Standalone script to merge per-model split files produced by
-Story_evaluator_api.py into a single combined JSONL file.
-
-Usage:
-    python merge_evaluations.py
-
-Keep EVALUATION_MODELS and OUTPUT_PATH in sync with Story_evaluator_api.py.
-"""
 
 import os
 import re

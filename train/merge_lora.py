@@ -1,8 +1,3 @@
-"""Standalone LoRA merge script — runs outside DeepSpeed context.
-
-Called by train.py after training via subprocess so that the active
-DeepSpeed ZeRO-3 plugin does not interfere with from_pretrained().
-"""
 import argparse
 import torch
 from peft import PeftModel

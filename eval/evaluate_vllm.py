@@ -1,19 +1,3 @@
-"""
-evaluate_vllm.py
-================
-Post-training evaluation using vLLM offline inference on the held-out test
-split (70%). Computes score_accuracy = exp(-mae) per TTCW metric, BERTScore
-F1 for review modes, and the composite eval_score. Results are saved to JSON
-and logged to W&B.
-
-Usage:
-    python evaluate_vllm.py \
-        --model   /path/to/models/ttcw-reviewer/Qwen3-8B-score_with_reviews \
-        --dataset /path/to/TTCW_sft_dataset \
-        --mode    score_with_reviews \
-        --output  /path/to/models/ttcw-reviewer/eval_results_score_with_reviews.json
-"""
-
 import argparse
 import gc
 import json

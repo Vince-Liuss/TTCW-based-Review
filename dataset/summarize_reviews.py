@@ -1,27 +1,3 @@
-"""
-summarize_reviews.py
-====================
-Preprocessing step: call an LLM to synthesize all per-model reviews for each
-TTCW metric into a single, coherent consensus review.
-
-The synthesized text is stored back into the evaluated JSONL under a special
-"_synthesis" key inside each metric dict:
-
-    "Fluency1": {
-        "nvidia/Llama-3_3-Nemotron-Super-49B-v1_5": {"score": 8, "reason": "..."},
-        "openai/gpt-oss-120b":                       {"score": 7, "reason": "..."},
-        "Qwen/Qwen3-Next-80B-A3B-Instruct":          {"score": 6, "reason": "..."},
-        "overall": {"review": "...", "avg_score": 7.0}
-    }
-
-Run this once before dataset_build.py when using review_aggregation="summarized".
-The script is resumable: rows/metrics that already have a valid "_synthesis" entry
-are skipped.
-
-Usage:
-    python summarize_reviews.py
-"""
-
 import os
 
 os.environ["OMP_NUM_THREADS"] = "16"

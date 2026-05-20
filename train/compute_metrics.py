@@ -1,12 +1,3 @@
-"""
-compute_metrics.py
-==================
-Evaluation utilities for a trained TTCW model (TRL SFTTrainer).
-
-Uses teacher-forced argmax decoding — fast and fully distributed.
-Works for both mid-training eval steps and the final held-out test pass.
-"""
-
 from __future__ import annotations
 
 import re

@@ -1,14 +1,4 @@
 #!/bin/bash
-# Auto-running evaluator — grouped by model to avoid reloading between
-# standard and cross-mode runs that share the same model weights.
-#
-# Safe to rerun: a run is skipped if its output JSON already exists
-# (written only on full success by evaluate_vllm.py).
-# Predictions cache survives crashes so a rerun skips vLLM inference.
-#
-# Usage:
-#   bash evaluate_ttcw_auto.sh           # skip already-completed runs
-#   bash evaluate_ttcw_auto.sh --fresh   # wipe all output JSONs and caches first
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 export NCCL_P2P_LEVEL=NVL
