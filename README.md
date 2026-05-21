@@ -39,6 +39,8 @@ A framework for building LLM-based reviewers of creative writing using the TTCW 
 
 ## TTCW Metrics (14)
 
+The 14 metrics are defined in [Art or Artifice? Large Language Models and the False Promise of Creativity](https://doi.org/10.1145/3613904.3642731) (Chakrabarty et al., CHI 2024).
+
 | Dimension | Metrics |
 |-----------|---------|
 | Fluency (5) | Narrative Pacing, Scene vs Exposition Balance, Language Proficiency, Narrative Ending Quality, Understandability |
