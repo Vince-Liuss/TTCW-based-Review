@@ -1,6 +1,5 @@
 # TTCW-based-Review
 
-> **Note:** The paper is currently under review. The citation will be updated upon arXiv release.
 
 A framework for building LLM-based reviewers of creative writing using the TTCW (Thinking Through Creative Writing) evaluation criteria. The pipeline covers dataset construction, model training, and evaluation across 14 structured writing quality metrics.
 
@@ -215,10 +214,14 @@ bash scripts/evaluate_ttcw_auto.sh --fresh
 ## Citation
 
 ```bibtex
-@article{coming_soon,
-  title   = {},
-  author  = {},
-  year    = {2025},
+@misc{liu2026reasoningsupervisionhurtsttcwbased,
+      title={When Reasoning Supervision Hurts: TTCW-Based Long-Form Literary Review Generation}, 
+      author={Jinlong Liu and Mohammed Bahja and Mark Lee},
+      year={2026},
+      eprint={2605.20364},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2605.20364}, 
 }
 ```
 
