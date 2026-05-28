@@ -142,7 +142,11 @@ _REASONING_MODES = {"score_with_reasoning", "review_with_reasoning"}
 
 
 def _strip_thinking(text: str) -> str:
-    """Remove Qwen3 <think>…</think> reasoning block so parsers only see the final output."""
+    """Remove Qwen3 <think>…</think> reasoning block so parsers only see the final output.
+    If <think> is present but </think> is missing (truncated/runaway generation), return ""
+    since no answer content was produced."""
+    if "<think>" in text and "</think>" not in text:
+        return ""
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
 
 
