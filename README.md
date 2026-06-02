@@ -66,6 +66,41 @@ uv sync --python 3.12
 
 Requires 4 CUDA GPUs. Update the data and model paths at the top of each script before running.
 
+### Docker
+
+A `Dockerfile` is provided as an alternative to local setup. Requires the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/).
+
+```bash
+# Build
+docker build -t ttcw-reviewer .
+
+# Training
+docker run --rm --gpus all \
+  -v /path/to/data:/path/to/data \
+  -v /path/to/models:/path/to/models \
+  -v $(pwd):/workspace -w /workspace \
+  ttcw-reviewer accelerate launch --deepspeed_config_file config/ds_config.json train/train.py \
+    --dataset /path/to/TTCW_sft_dataset \
+    --model Qwen/Qwen3-8B \
+    --messages_column score_with_reviews \
+    --epochs 1 \
+    --max_seq_length 16384 \
+    --batch_size 7 \
+    --accumulation_steps 8 \
+    --output_dir /path/to/models/ttcw-reviewer
+
+# Evaluation
+docker run --rm --gpus all \
+  -v /path/to/data:/path/to/data \
+  -v /path/to/models:/path/to/models \
+  -v $(pwd):/workspace -w /workspace \
+  ttcw-reviewer python eval/evaluate_vllm.py \
+    --model /path/to/models/ttcw-reviewer/Qwen3-8B-score_with_reviews \
+    --dataset /path/to/TTCW_sft_dataset \
+    --mode score_with_reviews \
+    --output /path/to/models/ttcw-reviewer/eval_results.json
+```
+
 ### vLLM
 
 `vllm==0.12.0` is included in `pyproject.toml` for post-training evaluation (`eval/evaluate_vllm.py`). For the dataset pipeline, vLLM is used in server mode only — no direct import required.
