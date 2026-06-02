@@ -95,7 +95,7 @@ def parse_review_output(text: str) -> dict[str, str | None]:
         start = match.end()
         end = headers[i + 1].start() if i + 1 < len(headers) else len(text)
         body = text[start:end].strip()
-        if body:
+        if body and len(body.split()) <= 800:
             reviews[label] = body
     return reviews
 

@@ -148,7 +148,6 @@ def compute_results(predictions: list[str], dataset, mode: str, enable_thinking_
         gt_reviews   = [parse_review_output(t) for t in gt_texts]
 
         bs_per_metric: list[float] = []
-        bertscore_chunk = 256
         for key in tqdm(TTCW_METRICS, desc="BERTScore"):
             pairs = [
                 (p[key], g[key])
@@ -159,28 +158,15 @@ def compute_results(predictions: list[str], dataset, mode: str, enable_thinking_
                 continue
             preds_key = [p for p, _ in pairs]
             refs_key  = [g for _, g in pairs]
-            truncated = 0
-            for i, t in enumerate(preds_key):
-                words = t.split()
-                if len(words) > 500:
-                    print(f"  [LONG] {key} pred[{i}] = {len(words)} words — truncating to 500")
-                    preds_key[i] = " ".join(words[:500])
-                    truncated += 1
-            if truncated:
-                results[f"truncated_reviews/{key}"] = truncated
-            all_f1: list[float] = []
-            for start in range(0, len(preds_key), bertscore_chunk):
-                chunk_result = bs_metric.compute(
-                    predictions=preds_key[start : start + bertscore_chunk],
-                    references=refs_key[start : start + bertscore_chunk],
-                    model_type="microsoft/deberta-xlarge-mnli",
-                    device=torch.device("cuda:0"),
-                    lang="en",
-                    batch_size=4,
-                )
-                all_f1.extend(chunk_result["f1"])
-                torch.cuda.empty_cache()
-            f1 = round(float(np.mean(all_f1)), 4)
+            result = bs_metric.compute(
+                predictions=preds_key,
+                references=refs_key,
+                model_type="microsoft/deberta-xlarge-mnli",
+                device=torch.device("cuda:0"),
+                lang="en",
+                batch_size=64,
+            )
+            f1 = round(float(np.mean(result["f1"])), 4)
             results[f"bertscore_f1/{key}"] = f1
             bs_per_metric.append(f1)
 
